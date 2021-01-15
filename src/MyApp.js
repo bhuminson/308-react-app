@@ -33,11 +33,26 @@ function MyApp() {
     }
   }
 
+  async function makeDeleteCall(id) {
+    try {
+      const response = await axios.delete("http://localhost:5000/users/" + id);
+      return response;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
+
   function removeOneCharacter(index) {
-    const updated = characters.filter((character, i) => {
-      return i !== index;
+    const id = characters[index]["id"];
+    makeDeleteCall(id).then((result) => {
+      if (result.status === 204) {
+        const updated = characters.filter((character, i) => {
+          return i !== index;
+        });
+        setCharacters(updated);
+      }
     });
-    setCharacters(updated);
   }
 
   function updateList(person) {
